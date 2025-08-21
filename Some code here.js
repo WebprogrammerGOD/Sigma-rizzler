@@ -11,7 +11,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyDjGsS1ysiIleLKa5z_LGfBQqZLkImcNY4",
     authDomain: "absolute-firebase-52d31.firebaseapp.com",
     projectId: "absolute-firebase-52d31",
-    storageBucket: "absolute-firebase-52d31.firebasestorage.app",
+    storageBucket: "absolute-firebase-52d31.appspot.com",
     messagingSenderId: "1031045023743",
     appId: "1:1031045023743:web:a16ce917946eb943f309ca",
     measurementId: "G-QSF3CVJG1G"
@@ -27,9 +27,12 @@ let username = document.getElementById("Username");
 let email = document.getElementById("Email");
 let phonenumber = document.getElementById("phonenumber");
 let password = document.getElementById("Password");
-let confirm = document.getElementById("repeat");
+let confirmPassword = document.getElementById("repeat");
 
 let subBtn = document.getElementById("sub");
+
+//Check email pattern
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 //Add new account
 function addData() {
@@ -41,6 +44,10 @@ function addData() {
         alert("Please type your email");
         return;
     }
+    if (!emailPattern.test(email.value.trim())) {
+        alert("Please type a valid email address");
+        return;
+    }
     if (phonenumber.value.trim() == "") {
         alert("Please type your phone number");
         return;
@@ -49,16 +56,28 @@ function addData() {
         alert("Please type your password");
         return;
     }
-    else if (confirm.value !== password.value) {
+    if (password.value.trim().length < 6) {
+        alert("Your passwrod must be at least 6 characters long");
+        return;
+    }
+    else if (confirmPassword.value.trim() !== password.value.trim()) {
         alert("Your confirm password is incorrect");
         return;
     }
     
-    set(ref(db, "UserSet/" + username.value), {
-        username: String(username.value),
-        email: email.value,
-        phonenumber: Number(phonenumber.value),
-        password: String(password.value),
+    const userRef = ref(db, "UserSet/" + username.value);
+    get(userRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            alert("This username already exists. Please choose another one.");
+            return;
+        } else{
+            return set(userRef, {
+                username: String(username.value),
+                email: String(email.value),
+                phonenumber: String(phonenumber.value),
+                password: String(password.value),
+            })
+        }
     })
 
     .then(() => {
@@ -70,4 +89,12 @@ function addData() {
     })
 }
 
-subBtn.addEventListener("click", addData);
+subBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    addData();
+    username.value = "";
+    email.value = "";
+    phonenumber.value = "";
+    password.value = "";
+    confirmPassword.value = "";
+});
