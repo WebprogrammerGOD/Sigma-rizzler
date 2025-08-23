@@ -82,6 +82,8 @@ function addData() {
 
     .then(() => {
         alert("Successfully added your data");
+        signInWithEmailAndPassword(auth, email, password)
+        window.location.href = "login.html"; // Redirect to login page
     })
     .catch((error) => {
         alert("ERROR: Can't add your data \n Please try again later");
