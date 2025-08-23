@@ -66,11 +66,11 @@ function addData() {
     }
     
     const userRef = ref(db, "UserSet/" + username.value);
-    get(userRef).then((snapshot) => {
+    get(userRef).then((snapshot) => {   //Check if username already exists
         if (snapshot.exists()) {
             alert("This username already exists. Please choose another one.");
             return;
-        } else{
+        } else {
             return set(userRef, {
                 username: String(username.value),
                 email: String(email.value),
