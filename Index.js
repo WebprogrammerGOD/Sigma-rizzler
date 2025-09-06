@@ -25,6 +25,8 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth();
 
+let creatorBtn = document.getElementById("creator");
+
 //User check
 if (!auth) {
     console.log("No user is signed in");
@@ -70,4 +72,31 @@ db.collection("News").orderBy("date", "desc").onSnapshot((snapshot) => {
         li.innerHTML = `<h3>${news.title}<\h3><p>${news.content}<\p><p>${news.date}<\p><hr>`;
         newsList.appendChild(li);
     })
+})
+
+//Check role
+function checkRole() {
+    const user = auth.currentUser;
+    if (user) {
+        const uid = user.uid;
+        const docRef = doc(db, "Users", uid);
+        getDoc(docRef).then((doc) => {
+            if (doc.exists()) {
+                const rol = doc.data().role;
+            }
+        })
+    } else {
+        alert("You are not signed in!");
+        return;
+    }
+}
+
+creatorBtn.addEventListener("click", (e) => {
+    checkRole();
+    if (rol === "News writer" || rol === "ADMIN") {
+        window.location.href = "create.html";
+    } else {
+        alert("You do not have permission to access this page");
+        return;
+    }
 })

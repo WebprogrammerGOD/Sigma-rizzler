@@ -32,12 +32,20 @@ let password = document.getElementById("Password");
 let confirmPassword = document.getElementById("repeat");
 
 let subBtn = document.getElementById("sub");
+let loginBtn = document.getElementById("login");
+
+//Check user if they agreed with terms and conditions
+let agreement = document.getElementById("agreement");
 
 //Check email pattern
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 //Add new account
 function addData() {
+    if (username.value.trim() == "") {
+        alert("Please type your username");
+        return;
+    }
     if (email.value.trim() == "") {
         alert("Please type your email");
         return;
@@ -80,21 +88,49 @@ function addData() {
 
     .then(() => {
         alert("Successfully added your data");
-        signInWithEmailAndPassword(auth, email, password)
         window.location.href = "login.html"; // Redirect to login page
     })
     .catch((error) => {
-        alert("ERROR: Can't add your data \n Please try again later");
+        alert("ERROR: Can't add your data \n Please try again later \n Error message: " + error.message);
         console.log(error);
     })
 }
 
+//Register
 subBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    addData();
-    username.value.reset();
-    email.value.reset();
-    phonenumber.value.reset();
-    password.value.reset();
-    confirmPassword.value.reset();
+    e.preventDefault(); // Prevent from submitting the empty form
+    if (!agreement.checked) {
+        alert("You must agree with Privacy Policy and Websites terms and conditions of use before creating an account");
+        return;
+    } else {
+        addData();
+        username.value.reset();
+        email.value.reset();
+        phonenumber.value.reset();
+        password.value.reset();
+        confirmPassword.value.reset();
+        window.location.href = "login.html";
+    }
+});
+
+//Login
+loginBtn.addEventListener("click", (e) => {
+    e.preventDefault(); // Prevent from submitting the empty form
+    get(userRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            signInWithEmailAndPassword(auth, email, password);
+            alert("Login successful");
+        } else {
+            alert("No user found!");
+            return;
+        }
+    })
+    
+    .then(() => {
+        window.location.href = "index.html"; // Redirect to home page
+    })
+    .catch((error) => {
+        alert("Login failed: " + error.message);
+        console.log(error);
+    })
 });
