@@ -57,6 +57,10 @@ button{
 button:hover{
     opacity: 1;
 }
+/*IDs*/
+#News{
+    padding: 32px 16px 32px 16px;
+}
 /*Classes*/
 .right{
     display: flex;
@@ -79,23 +83,14 @@ button:hover{
 .nav-items{
     font-family: "Libertinus Serif", serif;
     font-weight: 500;
-    transition: background-color 0.3s, color 0.3s;
-}
-.nav-items:hover{
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff !important;
+    transition: 0.3s;
 }
 .nav-items.right{
     font-size: 16px;
 }
-.image-desc{
-    opacity: 0.5;
-    padding-top: 16px;
-}
-.container{
-    padding: 16px;
-    max-width: 1200px;
-    margin: auto;
+.nav-items:hover{
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff !important;
 }
 .box{
     display: flex;
@@ -111,6 +106,18 @@ button:hover{
 .text-box{
     padding: 16px 0px;
 }
+.image-desc{
+    opacity: 0.5;
+    padding-top: 16px;
+}
+.container{
+    padding: 16px;
+    max-width: 1200px;
+    margin: auto
+}
+.text-box{
+    padding: 16px 0px;
+}
 .redirect{
     font-size: 16px;
     cursor: pointer;
@@ -119,10 +126,13 @@ button:hover{
     background-color: #eee;
     border-radius: 4px;
 }
+.center{
+    text-align: center;
+}
 .contact{
     color: black !important;
 }
 .resize{
-    max-width: 40%;
+    width: 40%;
     height: 40%;
 }

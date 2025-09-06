@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -21,6 +22,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
+const auth = getAuth();
 
 //Functions
 let username = document.getElementById("Username");
@@ -36,10 +38,6 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 //Add new account
 function addData() {
-    if (username.value.trim() === "") {
-        alert("Please type your username");
-        return;
-    }
     if (email.value.trim() == "") {
         alert("Please type your email");
         return;
@@ -94,9 +92,9 @@ function addData() {
 subBtn.addEventListener("click", (e) => {
     e.preventDefault();
     addData();
-    username.value = "";
-    email.value = "";
-    phonenumber.value = "";
-    password.value = "";
-    confirmPassword.value = "";
+    username.value.reset();
+    email.value.reset();
+    phonenumber.value.reset();
+    password.value.reset();
+    confirmPassword.value.reset();
 });

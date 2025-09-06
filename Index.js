@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,7 +23,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
-const auth = auth.currentUser;
+const auth = getAuth();
 
 //User check
 if (!auth) {
@@ -57,5 +57,17 @@ onAuthStateChanged(auth, async (user) => {
     })
     .catch((error) => {
         console.log("Cannot get your role" + error)
+    })
+})
+
+//News sorting
+const newsList = document.getElementById("news-list");
+db.collection("News").orderBy("date", "desc").onSnapshot((snapshot) => {
+    newsList.innerHTML = "";
+    snapshot.forEach((doc) => {
+        const news = doc.data();
+        const li = document.createElement("li");
+        li.innerHTML = `<h3>${news.title}<\h3><p>${news.content}<\p><p>${news.date}<\p><hr>`;
+        newsList.appendChild(li);
     })
 })
